@@ -1,0 +1,5 @@
+pandas
+yattag
+python-i18n
+pysrt
+emoji
