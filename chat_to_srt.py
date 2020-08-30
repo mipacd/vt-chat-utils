@@ -24,17 +24,18 @@ sub_file = pysrt.open(args.srt_file)
 
 index = 1
 
-lang_dict = {'en': ['EN', 'ENG'],
-            'es': ['ES', 'ESP']}
+lang_dict = {'en': ['[en]', '[eng]', 'en:', 'eng:', '(en)', '(eng)'],
+            'es': ['[es]', '[esp]', 'es:', 'esp:', '(es)', '(esp)'],
+            'ru': ['[ru]', '(ru)', 'ru:']}
 
 with open(sys.argv[1]) as f:
     records = csv.DictReader(f)
     for row in records:
         msg = row['message']
+        msg_lower = row['message'].lower()
         if ('[' in msg and ']' in msg) or ('(' in msg and ')' in msg) or ':' in msg:
-            if args.lang.lower() == 'en':
-                if 'EN' in msg or 'ENG' in msg:
-                    print(msg)
+            for tag in lang_dict[args.lang.lower()]:
+                if tag in msg_lower:
                     sub = pysrt.SubRipItem()
                     sub.index = index
                     sub_start = int(row['time_in_seconds']) - args.offset
@@ -43,8 +44,6 @@ with open(sys.argv[1]) as f:
                     sub.text = re.sub("[\[\(].*?[\]\)]", "", msg)
                     sub_file.append(sub)
                     index += 1
-            
-            #elif args.lang.lower() = 'es':
             
 sub_file.save()
             
