@@ -25,6 +25,7 @@ en:
     ru_tl_per_min: "Russian translations per minute"
     kusa_agg: "KUSA 30 Second Aggregate (Top 10)"
     faq_agg: "FAQ 30 Second Aggregate (Top 10)"
+    tete_agg: "Tete (てぇてぇ) 30 Second Aggregate (Top 10)"
     agg_tstamp: "Timestamp"
     agg_count: "Count"
     vtuber_msgs: "VTuber Chat Messages"

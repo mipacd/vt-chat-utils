@@ -26,7 +26,8 @@ Takes a YouTube chat log CSV file and generates an HTML report. Usage:
  - User stats: unique chat users, estimated number and percentage of non-JP users
  - Live translation stats: number and translations per minute, for supported languages (English, Spanish, Russian)
  - Top 10 kusa 30 second aggregate. Find 30 second increments where kusa counts are the highest. Potentially useful for finding clipable material
- - Top 10 FAQ 30 second aggregate (displays only when FAQs are detected).
+ - Top 10 FAQ 30 second aggregate (displays only when FAQs are detected)
+ - Top 10 Tete (てぇてぇ) 30 second aggregate (displays only when てぇてぇ is detected)
  - Chat messages from a list of known VTubers. Japanese messages are hyperlinked to the DeepL translation. Caution: This may show impostors.
  - i18n support, see the i18n folder
  

@@ -25,6 +25,9 @@ faq_list = []
 faq_list.append([timedelta(seconds=0), 0])
 kusa_list = []
 kusa_list.append([timedelta(seconds=0), 0])
+tete_list = []
+tete_list.append([timedelta(seconds=0), 0])
+tete_count = 0
 faq_count = 0
 vtuber_msg_list = []
 doc, tag, text, line = Doc().ttl()
@@ -39,33 +42,56 @@ with open(sys.argv[1]) as f:
     records = csv.DictReader(f)
     for row in records:
         msg = row['message'].lower()
+        
+        #detect jp message
         has_jp = re.search(jp_regex, msg)
         if len(msg) >= 1:
             if has_jp or (msg.startswith(":") and msg.endswith(":")) or (is_emoji(msg[0]) and is_emoji(msg[-1])): 
                 info_dict['jp_count'] += 1
             else:
                 not_jp_names.append(row['author'])
+                
         kusa_old = info_dict['kusa']
+        
+        #kusa counter
         info_dict['kusa'] += msg.count("草") + msg.count("kusa") + msg.count("grass") + msg.count("茶葉") + msg.count("_fbkcha")
+        
+        #live tl counter
         if '[en]' in msg or '[eng]' in msg or '(en)' in msg or '(eng)' in msg or msg.startswith('en:') or msg.startswith('eng:'):
             info_dict['tl_en'] += 1
-        elif '[es]' in msg or '[esp]' in msg or '(es)' in msg or '(esp)' in msg:
+        elif '[es]' in msg or '[esp]' in msg or '(es)' in msg or '(esp)' in msg or msg.startswith('es:') or msg.startswith('esp:'):
             info_dict['tl_es'] += 1
-        elif '[ru]' in msg or '(ru)' in msg:
+        elif '[ru]' in msg or '(ru)' in msg or msg.startswith('ru:'):
             info_dict['tl_ru'] += 1
         chat_names.append(row['author'])
+        
+        #ending w counter
         if msg.endswith('w'):
             w_count = Counter(msg)['w']
             info_dict['kusa'] += w_count
+            
+        #kusa message counter, store for kusa agg
         if kusa_old != info_dict['kusa']:
             kusa_msg_count += 1
             kusa_list.append([timedelta(seconds=int(row['time_in_seconds'])), 1])
+            
+        #lol counter
         info_dict['lol'] += msg.count("lol") + msg.count("lmao")
+        
+        #faq message counter, store for faq agg
         if "faq" in msg:
             faq_list.append([timedelta(seconds=int(row['time_in_seconds'])), 1])
             faq_count += 1
+            
+        #tete message finder, store for tete agg
+        if 'てぇてぇ' in msg:
+            tete_list.append([timedelta(seconds=int(row['time_in_seconds'])), 1])
+            tete_count += 1
+        
+        #vtuber message finder
         if row['author'] in vtuber_list.vtuber_list:
             vtuber_msg_list.append(row)
+            
         line_count += 1
         time_index = row['time_in_seconds']
 
@@ -76,6 +102,7 @@ chat_names = list(set(chat_names))
 not_jp_names = list(set(not_jp_names))
 faq_df = pd.DataFrame(faq_list, columns=['tstamp', 'count'])
 kusa_df = pd.DataFrame(kusa_list, columns=['tstamp', 'count'])
+tete_df = pd.DataFrame(tete_list, columns=['tstamp', 'count'])
 kl_count = info_dict['kusa'] + info_dict['lol']
 
 #generate html
@@ -171,6 +198,16 @@ with tag('html'):
                     faq_df.reset_index(inplace=True)
                     faq_df.rename(columns={'tstamp': i18n.t('chat_info.agg_tstamp'), 'count': i18n.t('chat_info.agg_count')}, inplace=True)
                     doc.asis(faq_df.head(10).to_html(index=False, classes=['table', 'table-bordered']))
+                if tete_count:
+                    with tag('h2'):
+                        text(i18n.t('chat_info.tete_agg'))
+                    tete_df = tete_df.groupby(['tstamp']).sum()
+                    tete_df = tete_df.resample("30S").sum()
+                    tete_df = tete_df[tete_df['count'] != 0]
+                    tete_df.sort_values(by=['count'], inplace=True, ascending=False)
+                    tete_df.reset_index(inplace=True)
+                    tete_df.rename(columns={'tstamp': i18n.t('chat_info.agg_tstamp'), 'count': i18n.t('chat_info.agg_count')}, inplace=True)
+                    doc.asis(tete_df.head(10).to_html(index=False, classes=['table', 'table-bordered']))
                 if vtuber_msg_list:
                     with tag('h2'):
                         text(i18n.t('chat_info.vtuber_msgs'))
