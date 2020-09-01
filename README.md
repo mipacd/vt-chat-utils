@@ -38,7 +38,7 @@ Generate an SRT file from the YouTube chat log using detected live translations.
   
   ## Options
  
- - --colon, -l	Use messages of the format <STREAMER: MSG>, more false positives, english only (default=False)
+ - --colon, -c	Use messages of the format <STREAMER: MSG>, more false positives, english only (default=False)
  - --lang, -l   Set language (default: en) (supported: en, es, ru)
  - --offset, -o  Negative offset of sub from original chat message (default: 15s)
  - --duration, -d  Time the sub will remain on screen (default: 5s)
