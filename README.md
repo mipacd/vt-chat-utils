@@ -25,19 +25,20 @@ Takes a YouTube chat log CSV file and generates an HTML report. Usage:
  - lol stats: count, per minute, and an adjusted score
  - User stats: unique chat users, estimated number and percentage of non-JP users
  - Live translation stats: number and translations per minute, for supported languages (English, Spanish, Russian)
- - Top 10 kusa 30 second aggregate. Find 30 second increments where kusa counts are the highest. Potentially useful for finding clipable material
+ - Top 10 kusa 30 second aggregate. Find 30 second increments where kusa counts are the highest. Potentially useful for finding clippable material
  - Top 10 FAQ 30 second aggregate (displays only when FAQs are detected)
  - Top 10 Tete (てぇてぇ) 30 second aggregate (displays only when てぇてぇ is detected)
  - Chat messages from a list of known VTubers. Japanese messages are hyperlinked to the DeepL translation. Caution: This may show impostors.
  - i18n support, see the i18n folder
  
 # chat_to_srt.py
-Generate an SRT file from the YouTube chat log using detected live translations. The SRT can be used with YouTube using [this Chrome extension](https://chrome.google.com/webstore/detail/subtitles-for-youtube/oanhbddbfkjaphdibnebkklpplclomal). Basic usage:
+Generate an SRT file from the YouTube chat log using detected live translations. The SRT can be used with YouTube using [this Chrome extension](https://chrome.google.com/webstore/detail/subtitles-for-youtube/oanhbddbfkjaphdibnebkklpplclomal) or with archival copies stored on [Plex servers](https://support.plex.tv/articles/200471133-adding-local-subtitles-to-your-media/#toc-3). Unlike chat filters, SRT files allow subtitles to be overlayed over full screen video but cannot be used with live streams. Basic usage:
 
     python3 chat_to_srt.py log_file.csv subs.srt
   
   ## Options
  
+ - --colon, -l	Use messages of the format <STREAMER: MSG>, more false positives, english only (default=False)
  - --lang, -l   Set language (default: en) (supported: en, es, ru)
  - --offset, -o  Negative offset of sub from original chat message (default: 15s)
  - --duration, -d  Time the sub will remain on screen (default: 5s)

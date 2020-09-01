@@ -34,6 +34,11 @@ doc, tag, text, line = Doc().ttl()
 i18n.load_path.append(os.path.abspath("./i18n"))
 jp_regex = "[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]"
 
+#add spaced colon variants to name list
+name_list = vtuber_list.vtuber_tl_list
+for name in name_list:
+    name_list = name_list + (name.replace(':', ' :'),)
+
 def is_emoji(char):
     return char in emoji.UNICODE_EMOJI
 
@@ -57,7 +62,7 @@ with open(sys.argv[1]) as f:
         info_dict['kusa'] += msg.count("草") + msg.count("kusa") + msg.count("grass") + msg.count("茶葉") + msg.count("_fbkcha")
         
         #live tl counter
-        if '[en]' in msg or '[eng]' in msg or '(en)' in msg or '(eng)' in msg or msg.startswith('en:') or msg.startswith('eng:'):
+        if '[en]' in msg or '[eng]' in msg or '(en)' in msg or '(eng)' in msg or msg.startswith('en:') or msg.startswith('eng:') or msg.startswith(name_list):
             info_dict['tl_en'] += 1
         elif '[es]' in msg or '[esp]' in msg or '(es)' in msg or '(esp)' in msg or msg.startswith('es:') or msg.startswith('esp:'):
             info_dict['tl_es'] += 1

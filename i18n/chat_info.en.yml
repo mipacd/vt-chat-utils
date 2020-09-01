@@ -16,7 +16,7 @@ en:
     unique_users: "Unique chat users"
     non_jp_users: "Estimated non-JP users"
     non_jp_user_per: "Estimated non-JP user percent"
-    tl_stats: "Live Translation Stats"
+    tl_stats: "Live Translation Stats (Estimated)"
     en_tl_count: "English translation count"
     en_tl_per_min: "English translations per minute"
     es_tl_count: "Spanish translation count"

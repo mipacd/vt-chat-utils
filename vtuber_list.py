@@ -1,4 +1,4 @@
-
+#channel list for finding chat messages
 vtuber_list = ['AZKi Channel', 'Miko Ch. さくらみこ', 'Roboco Ch. - ロボ子', 'SoraCh. ときのそらチャンネル', 'Suisei Channel',
     'Mel Channel 夜空メル', 'Haato Channel 赤井はあと', 'フブキCh。白上フブキ', 'Matsuri Channel 夏色まつり', 'アキロゼCh。Vtuber/ホロライブ所属',
     'Shion Ch. 紫咲シオン', 'Aqua Ch. 湊あくあ', 'Nakiri Ayame Ch. 百鬼あやめ', 'Choco Ch. 癒月ちょこ', 'Choco subCh. 癒月ちょこ',
@@ -10,3 +10,9 @@ vtuber_list = ['AZKi Channel', 'Miko Ch. さくらみこ', 'Roboco Ch. - ロボ�
     'Shien Ch.影山シエン', 'Airani Iofifteen Channel', 'Moona Hoshinova hololive-ID', 'Ayunda Risu Ch.', '天野ピカミィ. Pikamee',
     '緋笠トモシカ - Tomoshika Hikasa -', '磁富モノエ', '月ノ美兎', 'でびでび・でびる', '鈴原るる【にじさんじ所属】', 'Hana Macchia Ch.【NIJISANJI ID】',
     '佃煮のりおちゃんねる【犬山たまき】', 'ひなたチャンネル', '星川サラ / Sara Hoshikawa']
+
+#name list for finding translations of the format <NAME: MSG>
+vtuber_tl_list = ('azki:', 'miko:', 'roboco:', 'sora:', 'suisei:', 'mel:', 'haato:', 'haachama:', 'fubuki:', 'fbk:', 'matsuri:',
+    'aki:', 'akirose:', 'shion:', 'aqua:', 'ayame:', 'choco:', 'subaru:', 'korone:', 'mio:', 'okayu:', 'noel:', 'rushia:', 'pekora:',
+    'flare:', 'marine:', 'luna:', 'coco:', 'watame:', 'kanata:', 'towa:', 'lamy:', 'nene:', 'botan:', 'aloe:', 'polka:', 'aruran:',
+    'rikka:', 'kira:', 'miyabi:', 'izuru:', 'temma:', 'roberu:', 'astel:', 'oga:', 'shien:', 'iofi:', 'moona:', 'risu:')
