@@ -183,6 +183,18 @@ with tag('html'):
                     with tag('tr'):
                         line('td', i18n.t('chat_info.ru_tl_per_min'))
                         line('td', str(round((info_dict['tl_ru']/duration), 2)))
+                with tag('h2'):
+                    text(i18n.t('chat_info.misc_stats'))
+                with tag('table', id='misc-table', klass='table table-bordered'):
+                    with tag('tr'):
+                        line('td', i18n.t('chat_info.faq_count'))
+                        line('td', str(faq_count))
+                    with tag('tr'):
+                        line('td', i18n.t('chat_info.tete_count'))
+                        line('td', str(tete_count))
+                    with tag('tr'):
+                        line('td', i18n.t('chat_info.tete_score'))
+                        line('td', str(round((tete_count/len(chat_names)*1000), 2)))
                 if kusa_msg_count:
                     with tag('h2'):
                         text(i18n.t('chat_info.kusa_agg'))
