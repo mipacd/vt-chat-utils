@@ -3,3 +3,4 @@ yattag
 python-i18n
 pysrt
 emoji
+python-dateutil

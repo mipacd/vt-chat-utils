@@ -33,10 +33,12 @@ vtuber_list = ['AZKi Channel', 'Miko Ch. さくらみこ', 'Roboco Ch. - ロボ�
     'バーチャル債務者youtuber天開司', 'Fairys Channel', 'ZEA Cornelia【NIJISANJI ID】', 'Taka Radjiman【NIJISANJI ID】', 'Rai Galilei【NIJISANJI ID】',
     'Riksa Dhirendra【NIJISANJI ID】', 'Amicia Michella【NIJISANJI ID】', 'Miyu Ottavia 【NIJISANJI ID】', 'Azura Cecillia 【NIJISANJI ID】',
     'Layla Alstroemeria [NIJISANJI ID]', 'Nara Haramaung 【NIJISANJI ID】', 'Etna Crimson 【NIJISANJI ID】', 'Bonnivier Pranaja 【NIJISANJI ID】',
-    'Siska Leontyne 【NIJISANJI ID】', 'Aadya【NIJISANJI EN】', 'Noor【NIJISANJI EN】', 'Vihaan【NIJISANJI EN】', 'Kurisu Channel 人見クリス']
+    'Siska Leontyne 【NIJISANJI ID】', 'Aadya【NIJISANJI EN】', 'Noor【NIJISANJI EN】', 'Vihaan【NIJISANJI EN】', 'Kurisu Channel 人見クリス',
+    'Mori Calliope Ch. hololive-EN', 'Takanashi Kiara Ch. hololive-EN', "Ninomae Ina'nis Ch. hololive-EN", 'Gawr Gura Ch. hololive-EN',
+    'Watson Amelia Ch. hololive-EN']
 
 #name list for finding translations of the format <NAME: MSG>
 vtuber_tl_list = ('azki:', 'miko:', 'roboco:', 'sora:', 'suisei:', 'mel:', 'haato:', 'haachama:', 'fubuki:', 'fbk:', 'matsuri:',
     'aki:', 'akirose:', 'shion:', 'aqua:', 'ayame:', 'choco:', 'subaru:', 'korone:', 'mio:', 'okayu:', 'noel:', 'rushia:', 'pekora:',
     'flare:', 'marine:', 'luna:', 'coco:', 'watame:', 'kanata:', 'towa:', 'lamy:', 'nene:', 'botan:', 'aloe:', 'polka:', 'aruran:',
-    'rikka:', 'kira:', 'miyabi:', 'izuru:', 'temma:', 'roberu:', 'astel:', 'oga:', 'shien:', 'iofi:', 'moona:', 'risu:')
+    'rikka:', 'kira:', 'miyabi:', 'izuru:', 'temma:', 'roberu:', 'astel:', 'oga:', 'shien:', 'iofi:', 'moona:', 'risu:', 'haachama [' )

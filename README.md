@@ -42,3 +42,7 @@ Generate an SRT file from the YouTube chat log using detected live translations.
  - --lang, -l   Set language (default: en) (supported: en, es, ru)
  - --offset, -o  Negative offset of sub from original chat message (default: 15s)
  - --duration, -d  Time the sub will remain on screen (default: 5s)
+ 
+# weekly_stats.py
+
+Generates stats for every (Hololive JP/EN) stream for the last calendar week and outputs a CSV file. Can take 10+ hours to complete because the YouTube chat replay API is very rate limited. This doesn't use much CPU however, so it's ideal to run as a cron job on a Raspberry Pi or other SBC. chat-replay-downloader must be in the repo directory in order to run. Also, a Google API key is required with access to the YouTube v3 API enabled (replace GOOGLE_API_KEY_HERE).

@@ -36,6 +36,10 @@ lang_dict = {'en': ['[en]', '[eng]', 'en:', 'eng:', '(en)', '(eng)', '[英訳/en
 name_list = vtuber_list.vtuber_tl_list
 for name in name_list:
     name_list = name_list + (name.replace(':', ' :'),)
+    
+#add single letter tags to name list
+for letter in range(ord('a'), ord('z') + 1):
+    name_list = name_list + ('[' + chr(letter) + ']',)
 
 with open(sys.argv[1]) as f:
     records = csv.DictReader(f)
