@@ -50,8 +50,8 @@ if jp_now.weekday() == 6:
 else:
     start_date = jp_now - timedelta(days=jp_now.weekday() + 8)
     end_date = jp_now - timedelta(days=jp_now.weekday() + 2)
-start_time = datetime.datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0, tzinfo=pytz.timezone("Asia/Tokyo"))
-end_time = datetime.datetime(end_date.year, end_date.month, end_date.day, 23, 59, 59, tzinfo=pytz.timezone("Asia/Tokyo"))
+start_range = datetime.datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0, tzinfo=pytz.timezone("Asia/Tokyo"))
+end_range = datetime.datetime(end_date.year, end_date.month, end_date.day, 23, 59, 59, tzinfo=pytz.timezone("Asia/Tokyo"))
 date_str = start_date.strftime("%Y-%m-%d")
 
 csv_file = open('./stream_stats_' + date_str + '.csv', 'w')
@@ -73,7 +73,7 @@ for key, val in playlists.items():
         pub_date = vid.contentDetails.videoPublishedAt
         pub_dt = dateutil.parser.isoparse(pub_date).astimezone(pytz.timezone("Asia/Tokyo"))
 
-        if (start_time <= pub_dt <= end_time):
+        if (start_range <= pub_dt <= end_range):
             kusa_count = 0
             tete_count = 0
             faq_count = 0
