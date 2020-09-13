@@ -4,3 +4,4 @@ python-i18n
 pysrt
 emoji
 python-dateutil
+python-youtube
