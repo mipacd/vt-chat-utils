@@ -28,9 +28,10 @@ index = 1
 sub_count = 0
 
 #translation tags
-lang_dict = {'en': ['[en]', '[eng]', 'en:', 'eng:', '(en)', '(eng)', '[英訳/en]'],
+lang_dict = {'en': ['[en]', '[eng]', 'en:', 'eng:', '(en)', '(eng)', '[英訳/en]', 'en-', 'tl:', 'tl eng:', 'tl :', 'tl eng :'],
             'es': ['[es]', '[esp]', 'es:', 'esp:', '(es)', '(esp)'],
-            'ru': ['[ru]', '(ru)', 'ru:']}
+            'ru': ['[ru]', '(ru)', 'ru:'],
+            'jp': ['[jp]', '【jp】', '[訳す]', '【訳す】']}
 
 #add spaced colon variants to name list
 name_list = vtuber_list.vtuber_tl_list

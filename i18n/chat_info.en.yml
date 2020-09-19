@@ -21,6 +21,8 @@ en:
     en_tl_per_min: "English translations per minute"
     es_tl_count: "Spanish translation count"
     es_tl_per_min: "Spanish translations per minute"
+    jp_tl_count: "Japanese translation count"
+    jp_tl_per_min: "Japanese translations per minute"
     ru_tl_count: "Russian translation count"
     ru_tl_per_min: "Russian translations per minute"
     misc_stats: "Misc. Stats"

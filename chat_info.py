@@ -19,6 +19,7 @@ kusa_msg_count = 0
 info_dict['tl_en'] = 0
 info_dict['tl_es'] = 0
 info_dict['tl_ru'] = 0
+info_dict['tl_jp'] = 0
 chat_names = []
 not_jp_names = []
 faq_list = []
@@ -38,6 +39,8 @@ jp_regex = "[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff\uff66-\uff9f]"
 name_list = vtuber_list.vtuber_tl_list
 for name in name_list:
     name_list = name_list + (name.replace(':', ' :'),)
+for letter in range(ord('a'), ord('z') + 1):
+    name_list = name_list + ('[' + chr(letter) + ']',)
 
 def is_emoji(char):
     return char in emoji.UNICODE_EMOJI
@@ -54,7 +57,8 @@ with open(sys.argv[1]) as f:
             if has_jp or (msg.startswith(":") and msg.endswith(":")) or (is_emoji(msg[0]) and is_emoji(msg[-1])): 
                 info_dict['jp_count'] += 1
             else:
-                not_jp_names.append(row['author'])
+                if not msg.isnumeric():
+                    not_jp_names.append(row['author'])
                 
         kusa_old = info_dict['kusa']
         
@@ -62,17 +66,20 @@ with open(sys.argv[1]) as f:
         info_dict['kusa'] += msg.count("草") + msg.count("kusa") + msg.count("grass") + msg.count("茶葉") + msg.count("_fbkcha")
         
         #live tl counter
-        if '[en]' in msg or '[eng]' in msg or '(en)' in msg or '(eng)' in msg or msg.startswith('en:') or msg.startswith('eng:') or msg.startswith(name_list):
+        tl_tags = ('en:', 'eng:', 'en :', 'eng :', 'en-', 'tl:', 'tl eng:' 'tl :', 'tl eng :')
+        if '[en]' in msg or '[eng]' in msg or '(en)' in msg or '(eng)' in msg or '[英訳/en]' in msg or msg.startswith(tl_tags) or msg.startswith(name_list):
             info_dict['tl_en'] += 1
         elif '[es]' in msg or '[esp]' in msg or '(es)' in msg or '(esp)' in msg or msg.startswith('es:') or msg.startswith('esp:'):
             info_dict['tl_es'] += 1
         elif '[ru]' in msg or '(ru)' in msg or msg.startswith('ru:'):
             info_dict['tl_ru'] += 1
+        elif '[jp]' in msg or '[訳す]' in msg or '【訳す】' in msg or '【jp]' in msg:
+            info_dict['tl_jp'] += 1
         chat_names.append(row['author'])
         
         #ending w counter
         if msg.endswith('w'):
-            w_count = Counter(msg)['w']
+            w_count = Counter(msg)['w'] + Counter(msg_lower)['ｗ']
             info_dict['kusa'] += w_count
             
         #kusa message counter, store for kusa agg
@@ -89,7 +96,7 @@ with open(sys.argv[1]) as f:
             faq_count += 1
             
         #tete message finder, store for tete agg
-        if 'てぇてぇ' in msg:
+        if 'てぇてぇ' in msg or ':_tee::_tee:' in msg or 'tee tee' in msg or 'teetee' in msg:
             tete_list.append([timedelta(seconds=int(row['time_in_seconds'])), 1])
             tete_count += 1
         
@@ -177,6 +184,12 @@ with tag('html'):
                     with tag('tr'):
                         line('td', i18n.t('chat_info.es_tl_per_min'))
                         line('td', str(round((info_dict['tl_es']/duration), 2)))
+                    with tag('tr'):
+                        line('td', i18n.t('chat_info.jp_tl_count'))
+                        line('td', str(info_dict['tl_jp']))
+                    with tag('tr'):
+                        line('td', i18n.t('chat_info.jp_tl_per_min'))
+                        line('td', str(round((info_dict['tl_jp']/duration), 2)))
                     with tag('tr'):
                         line('td', i18n.t('chat_info.ru_tl_count'))
                         line('td', str(info_dict['tl_ru']))

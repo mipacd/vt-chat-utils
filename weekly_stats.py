@@ -56,7 +56,7 @@ date_str = start_date.strftime("%Y-%m-%d")
 
 csv_file = open('./stream_stats_' + date_str + '.csv', 'w')
 w = csv.writer(csv_file, delimiter=',')
-w.writerow(['streamer', 'title', 'thumbnail', 'chat_users', 'eng_tl_msg_per_min', 'not_jp_user_%', 'adj_kusa_per_min', 'tete_per_usr', 'faq_count', 'marry_per_usr', 'most_kusa_tstamp', 'most_faq_tstamp', 'most_tete_tstamp'])
+w.writerow(['streamer', 'title', 'thumbnail', 'chat_users', 'eng_tl_msg_per_min', 'jp_tl_msg_per_min', 'not_jp_user_%', 'adj_kusa_per_min', 'humor_score', 'tete_per_usr', 'faq_count', 'marry_per_usr', 'most_kusa_tstamp', 'most_humor_tstamp', 'most_faq_tstamp', 'most_tete_tstamp'])
 csv_file.flush()
 
 def is_emoji(char):
@@ -78,6 +78,7 @@ for key, val in playlists.items():
             tete_count = 0
             faq_count = 0
             marry_count = 0
+            humor_count = 0
             all_users = []
             not_jp_user = []
             faq_list = []
@@ -86,6 +87,8 @@ for key, val in playlists.items():
             kusa_list.append([timedelta(seconds=0), 0])
             tete_list = []
             tete_list.append([timedelta(seconds=0), 0])
+            humor_list = []
+            humor_list.append([timedelta(seconds=0), 0])
             faq_tstamp = ""
             tete_tstamp = ""
             kusa_tstamp = ""
@@ -101,6 +104,7 @@ for key, val in playlists.items():
                 continue
             
             tl_count = 0
+            jp_tl_count = 0
             for msg in chat:
                 #check for null messages from SCs
                 if msg['message']:
@@ -110,16 +114,19 @@ for key, val in playlists.items():
                     
                 #kusa counters
                 kusa_old = kusa_count
+                humor_old = humor_count
                 kusa_count += msg_lower.count("草") + msg_lower.count("kusa") + msg_lower.count("grass") + msg_lower.count("茶葉") + msg_lower.count("_fbkcha")
-                if msg_lower.endswith('w'):
-                    w_count = Counter(msg_lower)['w']
+                if msg_lower.endswith('w') or msg_lower.endswith('ｗ'):
+                    w_count = Counter(msg_lower)['w'] + Counter(msg_lower)['ｗ']
                     kusa_count += w_count
                 if kusa_old != kusa_count:
                     kusa_list.append([msg['time_in_seconds'], 1])
+                    humor_count += 1
+                
                     
                 #tete counters
                 tete_old = tete_count
-                tete_count += msg_lower.count("てぇてぇ") + msg_lower.count(':_tee::_tee:')
+                tete_count += msg_lower.count("てぇてぇ") + msg_lower.count(':_tee::_tee:') + msg_lower.count('tee tee') + msg_lower.count('teetee')
                 if tete_old != tete_count:
                     tete_list.append([msg['time_in_seconds'], 1])
                     
@@ -128,6 +135,16 @@ for key, val in playlists.items():
                 faq_count += msg_lower.count("faq")
                 if faq_old != faq_count:
                     faq_list.append([msg['time_in_seconds'], 1])
+                    
+                #humor counter
+                if "_lol" in msg_lower or "lmao" in msg_lower or "haha" in msg_lower or "🤣" in msg_lower or "😆" in msg_lower or "jaja" in msg_lower:
+                    humor_count += 1
+                else:
+                    for sub in msg_lower.split():
+                        if sub.startswith('lol'):
+                            humor_count += 1
+                if humor_old != humor_count:
+                    humor_list.append([msg['time_in_seconds'], 1])
                     
                 #marry counter
                 marry_count += msg_lower.count("marry me") + msg_lower.count("cásate")
@@ -140,16 +157,22 @@ for key, val in playlists.items():
                     is_not_jp = not has_jp
                     is_not_yt_emoji = not (msg_lower.startswith(':') and msg_lower.endswith(':'))
                     is_not_utf_emoji = not (is_emoji(msg_lower[0]) and is_emoji(msg_lower[-1]))
-                    if is_not_jp and is_not_yt_emoji and is_not_utf_emoji:
+                    is_not_number = not msg_lower.isnumeric()
+                    if is_not_jp and is_not_yt_emoji and is_not_utf_emoji and is_not_number:
                         not_jp_user.append(msg['author'])
                 
                 #live tl counter
-                if '[en]' in msg_lower or '[eng]' in msg_lower or '(en)' in msg_lower or '(eng)' in msg_lower or '[英訳/en]' in msg_lower or msg_lower.startswith('en:') or msg_lower.startswith('eng:') or msg_lower.startswith('en :') or msg_lower.startswith('eng :') or msg_lower.startswith(name_list):
+                tl_tags = ('en:', 'eng:', 'en :', 'eng :', 'en-', 'tl:', 'tl eng:', 'tl :', 'tl eng :')
+                if '[en]' in msg_lower or '[eng]' in msg_lower or '(en)' in msg_lower or '(eng)' in msg_lower or '[英訳/en]' in msg_lower or msg_lower.startswith(tl_tags) or msg_lower.startswith(name_list):
                     tl_count += 1
+                    
+                if '[jp]' in msg_lower or '[訳す]' in msg_lower or '【訳す】' in msg_lower or '【jp】' in msg_lower:
+                    jp_tl_count += 1
                         
             #calc tl msg per minute
             end_time = chat[-1]['time_in_seconds'] / 60
             msg_per_min = round(tl_count / end_time, 2)
+            jp_msg_per_min = round(jp_tl_count / end_time, 2)
             
             #user calcs
             user_count = len(set(all_users))
@@ -162,6 +185,9 @@ for key, val in playlists.items():
             #tete calc
             tete_user = round((tete_count / user_count) * 1000, 2)
             
+            #humor calc 
+            humor_score = round(((humor_count / user_count) / end_time) * 1000, 2)
+            
             #marry calc
             marry_score = ((marry_count / not_jp_count) / end_time) * 1000
             
@@ -169,12 +195,15 @@ for key, val in playlists.items():
             faq_df = pd.DataFrame(faq_list, columns=['tstamp', 'count'])
             kusa_df = pd.DataFrame(kusa_list, columns=['tstamp', 'count'])
             tete_df = pd.DataFrame(tete_list, columns=['tstamp', 'count'])
+            humor_df = pd.DataFrame(humor_list, columns=['tstamp', 'count'])
             kusa_df = kusa_df.set_index(['tstamp'])
             faq_df = faq_df.set_index(['tstamp'])
             tete_df = tete_df.set_index(['tstamp'])
+            humor_df = humor_df.set_index(['tstamp'])
             kusa_df.index = pd.to_timedelta(kusa_df.index, unit='s')
             faq_df.index = pd.to_timedelta(faq_df.index, unit='s')
             tete_df.index = pd.to_timedelta(tete_df.index, unit='s')
+            humor_df.index = pd.to_timedelta(humor_df.index, unit='s')
             kusa_df = kusa_df.groupby(['tstamp']).sum()
             kusa_df = kusa_df.resample("30S").sum()
             kusa_df = kusa_df[kusa_df['count'] != 0]
@@ -187,9 +216,14 @@ for key, val in playlists.items():
             tete_df = tete_df.resample("30S").sum()
             tete_df = tete_df[tete_df['count'] != 0]
             tete_df.sort_values(by=['count'], inplace=True, ascending=False)
+            humor_df = humor_df.groupby(['tstamp']).sum()
+            humor_df = humor_df.resample("30S").sum()
+            humor_df = humor_df[humor_df['count'] != 0]
+            humor_df.sort_values(by=['count'], inplace=True, ascending=False)
             kusa_df.reset_index(inplace=True)
             faq_df.reset_index(inplace=True)
             tete_df.reset_index(inplace=True)
+            humor_df.reset_index(inplace=True)
             
             if len(faq_df):
                 faq_tstamp = str(faq_df.iloc[0][0]).split('days')[1].strip()
@@ -197,7 +231,9 @@ for key, val in playlists.items():
                 kusa_tstamp = str(kusa_df.iloc[0][0]).split('days')[1].strip()
             if len(tete_df):
                 tete_tstamp = str(tete_df.iloc[0][0]).split('days')[1].strip()
+            if len(humor_df):
+                humor_tstamp = str(humor_df.iloc[0][0]).split('days')[1].strip()
             
             #write csv row
-            w.writerow([key, vid.snippet.title, "https://i.ytimg.com/vi/" + vid.snippet.resourceId.videoId + "/mqdefault.jpg", str(user_count), str(msg_per_min), str(not_jp_per), str(adj_kpm), str(tete_user), str(faq_count), str(marry_score), kusa_tstamp, faq_tstamp, tete_tstamp])
+            w.writerow([key, vid.snippet.title, "https://i.ytimg.com/vi/" + vid.snippet.resourceId.videoId + "/mqdefault.jpg", str(user_count), str(msg_per_min), str(jp_msg_per_min), str(not_jp_per), str(adj_kpm), str(humor_score), str(tete_user), str(faq_count), str(marry_score), kusa_tstamp, humor_tstamp, faq_tstamp, tete_tstamp])
             csv_file.flush()
