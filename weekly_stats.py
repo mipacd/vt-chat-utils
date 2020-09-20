@@ -121,12 +121,10 @@ for key, val in playlists.items():
                     kusa_count += w_count
                 if kusa_old != kusa_count:
                     kusa_list.append([msg['time_in_seconds'], 1])
-                    humor_count += 1
-                
                     
                 #tete counters
                 tete_old = tete_count
-                tete_count += msg_lower.count("てぇてぇ") + msg_lower.count(':_tee::_tee:') + msg_lower.count('tee tee') + msg_lower.count('teetee')
+                tete_count += msg_lower.count("てぇてぇ") + msg_lower.count(':_tee::_tee:') + msg_lower.count('tee tee') + msg_lower.count('teetee') + msg_lower.count('tete')
                 if tete_old != tete_count:
                     tete_list.append([msg['time_in_seconds'], 1])
                     
@@ -137,12 +135,15 @@ for key, val in playlists.items():
                     faq_list.append([msg['time_in_seconds'], 1])
                     
                 #humor counter
-                if "_lol" in msg_lower or "lmao" in msg_lower or "haha" in msg_lower or "🤣" in msg_lower or "😆" in msg_lower or "jaja" in msg_lower:
+                if kusa_old != kusa_count:
+                    humor_count += 1
+                elif "_lol" in msg_lower or "lmao" in msg_lower or "haha" in msg_lower or "🤣" in msg_lower or "😆" in msg_lower or "jaja" in msg_lower:
                     humor_count += 1
                 else:
                     for sub in msg_lower.split():
                         if sub.startswith('lol'):
                             humor_count += 1
+                            break
                 if humor_old != humor_count:
                     humor_list.append([msg['time_in_seconds'], 1])
                     
@@ -166,7 +167,7 @@ for key, val in playlists.items():
                 if '[en]' in msg_lower or '[eng]' in msg_lower or '(en)' in msg_lower or '(eng)' in msg_lower or '[英訳/en]' in msg_lower or msg_lower.startswith(tl_tags) or msg_lower.startswith(name_list):
                     tl_count += 1
                     
-                if '[jp]' in msg_lower or '[訳す]' in msg_lower or '【訳す】' in msg_lower or '【jp】' in msg_lower:
+                if '[jp]' in msg_lower or '[訳す]' in msg_lower or '【訳す】' in msg_lower or '【jp】' in msg_lower or '「和訳」' in msg_lower:
                     jp_tl_count += 1
                         
             #calc tl msg per minute
